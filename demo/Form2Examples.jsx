@@ -1,6 +1,13 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Form2, FormInput2, FormSelect2, FormSwitch2, useFormControl2, useFormEffect } from '../dist/main';
+import {
+  Form2,
+  FormGroupInput2,
+  FormGroupSelect2,
+  FormGroupSwitch2,
+  useFormControl2,
+  useFormEffect,
+} from '../dist/main';
 
 export function Form2Examples() {
   return (
@@ -34,45 +41,33 @@ export function Form2Examples() {
         }}
       >
         <div className="form-group">
-          <label htmlFor="">Obj</label>
           <div className="form-row">
             <div className="col">
-              <FormInput2 name="Obj.x" />
+              <FormGroupInput2 name="Obj.x" label="Obj.x" />
             </div>
             <div className="col">
-              <FormInput2 name="Obj.y" />
+              <FormGroupInput2 name="Obj.y" label="Obj.y" />
             </div>
             <div className="col">
-              <FormInput2 name="Obj.z" type="number" step="0.1" />
+              <FormGroupInput2 name="Obj.z" type="number" step="0.1" label="Obj.z" />
             </div>
           </div>
         </div>
+
+        <FormArray />
+
+        <FormArrayOfObjects />
+
+        <FormGroupInput2 name="attrA" label="AttrA" />
+
+        <FormGroupInput2 name="attrB" label="AttrB" />
+
+        <FormGroupSelect2 name="attrC" options={[1, 2, 3]} label="AttrC" />
+
+        <FormGroupSwitch2 name="attrD" id="attrD" label="AttrD" />
+
         <div className="form-group">
-          <label htmlFor="">Array</label>
-          <FormArray />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">Array of objects</label>
-          <FormArrayOfObjects />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">AttrA</label>
-          <FormInput2 name="attrA" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">AttrB</label>
-          <FormInput2 name="attrB" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">AttrC</label>
-          <FormSelect2 name="attrC" options={[1, 2, 3]} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">AttrD</label>
-          <FormSwitch2 name="attrD" id="attrD" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="">Version</label>
+          <label htmlFor=""></label>
           <FormVersion />
         </div>
 
@@ -103,13 +98,15 @@ function FormArray() {
     }
   }, [getValue, setValue, isRegistered]);
 
-  return (getValue() || []).map((v, index) => <FormInput2 key={index} name={`arr[${index}]`} />);
+  return (getValue() || []).map((v, index) => <FormGroupInput2 key={index} name={`arr[${index}]`} label="Array" />);
 }
 
 function FormArrayOfObjects() {
   const { getValue } = useFormControl2('arrObj');
 
-  return (getValue() || []).map((v, index) => <FormInput2 key={index} name={`arrObj[${index}].o`} />);
+  return (getValue() || []).map((v, index) => (
+    <FormGroupInput2 key={index} name={`arrObj[${index}].o`} label="Array of objects" />
+  ));
 }
 
 function FormObserver() {

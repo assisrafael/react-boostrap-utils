@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { booleanOrFunction } from '../forms/helpers/form-helpers';
 
 import { useFormControl2 } from './helpers/useFormControl';
-
+import { FormGroup2 } from './FormGroup';
 export function FormSwitch2({
   id,
   name,
@@ -41,6 +41,26 @@ FormSwitch2.propTypes = {
   disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   falseLabel: PropTypes.node,
   id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  required: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  trueLabel: PropTypes.node,
+};
+
+export function FormGroupSwitch2(props) {
+  return (
+    <FormGroup2 mockInvalidSibling={true} {...props}>
+      <FormSwitch2 {...props} />
+    </FormGroup2>
+  );
+}
+
+FormGroupSwitch2.propTypes = {
+  afterChange: PropTypes.func,
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  falseLabel: PropTypes.node,
+  help: PropTypes.node,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
   required: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   trueLabel: PropTypes.node,

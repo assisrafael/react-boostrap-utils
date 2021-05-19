@@ -10,7 +10,7 @@ import {
 } from '../forms/helpers/form-helpers';
 
 import { useFormControl2 } from './helpers/useFormControl';
-
+import { FormGroup2 } from './FormGroup';
 export function FormSelect2({
   name,
   options,
@@ -60,6 +60,39 @@ FormSelect2.propTypes = {
         PropTypes.string,
         PropTypes.number,
         PropTypes.shape({ value: PropTypes.any.isRequired, label: PropTypes.string.isRequired }),
+      ])
+    ),
+  ]),
+  placeholder: PropTypes.string,
+  required: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  trackBy: PropTypes.string,
+};
+
+export function FormGroupSelect2(props) {
+  return (
+    <FormGroup2 {...props}>
+      <FormSelect2 {...props} />
+    </FormGroup2>
+  );
+}
+
+FormGroupSelect2.propTypes = {
+  afterChange: PropTypes.func,
+  disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+  help: PropTypes.node,
+  id: PropTypes.string,
+  label: PropTypes.node.isRequired,
+  name: PropTypes.string.isRequired,
+  options: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.shape({
+          value: PropTypes.any.isRequired,
+          label: PropTypes.node.isRequired,
+        }),
       ])
     ),
   ]),
