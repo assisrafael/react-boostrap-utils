@@ -26,14 +26,20 @@ export function useFormControl2(name, type) {
   );
 
   const handleOnChange = useCallback(
-    ({ target }, _type) => {
+    ({ target }, _type, maskFunction) => {
       const value = getTargetValue(target);
 
-      const decodedValue = decode(value, type || _type);
+      let maskedOrDecodedValue;
 
-      setValue(decodedValue);
+      if (isFunction(maskFunction)) {
+        maskedOrDecodedValue = maskFunction(value);
+      } else {
+        maskedOrDecodedValue = decode(value, type || _type);
+      }
 
-      return decodedValue;
+      setValue(maskedOrDecodedValue);
+
+      return maskedOrDecodedValue;
     },
     [setValue, type]
   );
@@ -54,8 +60,8 @@ export function useFormControl2(name, type) {
     isRegistered() {
       return isRegistered;
     },
-    handleOnChangeFactory: (afterChange, type) => (e) => {
-      const newValue = handleOnChange(e, type);
+    handleOnChangeFactory: (afterChange, type, maskFunction) => (e) => {
+      const newValue = handleOnChange(e, type, maskFunction);
 
       if (isFunction(afterChange)) {
         afterChange(newValue);

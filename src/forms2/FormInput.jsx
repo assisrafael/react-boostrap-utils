@@ -5,7 +5,15 @@ import { booleanOrFunction } from '../forms/helpers/form-helpers';
 
 import { useFormControl2 } from './helpers/useFormControl';
 
-export function FormInput2({ type, name, required: _required, disabled: _disabled, afterChange, ..._attrs }) {
+export function FormInput2({
+  type,
+  name,
+  required: _required,
+  disabled: _disabled,
+  afterChange,
+  maskFunction,
+  ..._attrs
+}) {
   const { getValue, handleOnChangeFactory, getFormData } = useFormControl2(name);
 
   const disabled = booleanOrFunction(_disabled, getFormData());
@@ -25,7 +33,9 @@ export function FormInput2({ type, name, required: _required, disabled: _disable
     attrs.value = getValue();
   }
 
-  return <input {...attrs} className="form-control" onChange={handleOnChangeFactory(afterChange)} />;
+  return (
+    <input {...attrs} className="form-control" onChange={handleOnChangeFactory(afterChange, type, maskFunction)} />
+  );
 }
 
 FormInput2.defaultProps = {
@@ -36,6 +46,7 @@ FormInput2.propTypes = {
   afterChange: PropTypes.func,
   disabled: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
   id: PropTypes.string,
+  maskFunction: PropTypes.func,
   max: PropTypes.string,
   maxLength: PropTypes.string,
   min: PropTypes.string,

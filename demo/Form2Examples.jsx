@@ -7,7 +7,13 @@ export function Form2Examples() {
     <div>
       Alternative Form implementation
       <Form2
-        initialValues={{ attrA: 'ABC', Obj: { x: 'X', z: 0 }, arr: [1, 2, 3], arrObj: [{ o: 1 }, { o: 2 }, { o: 3 }] }}
+        initialValues={{
+          attrA: 'ABC',
+          Obj: { x: 'X', z: 0 },
+          arr: [1, 2, 3],
+          arrObj: [{ o: 1 }, { o: 2 }, { o: 3 }],
+          masks: {},
+        }}
         onSubmit={(data) => console.log('onSubmit', data)}
         onChange={(data) => console.log('onChange', data)}
         transform={(formData) => {
@@ -76,6 +82,8 @@ export function Form2Examples() {
           <FormVersion />
         </div>
 
+        <FormMasked />
+
         <div className="form-group">
           <label htmlFor="">Observer</label>
           <FormObserver />
@@ -121,4 +129,96 @@ function FormObserver() {
   });
 
   return <div>{state}</div>;
+}
+
+function FormMasked() {
+  const percentageFormControl = useFormControl2('masks.percentageValue');
+
+  const decimalMask = function (v) {
+    let maskedValue = String(v);
+
+    maskedValue = maskedValue.replace(/\D/g, '');
+    maskedValue = maskedValue.replace(/(\d)(\d{3})$/, '$1.$2');
+
+    return maskedValue;
+  };
+
+  const dateMask = function (v) {
+    let maskedValue = v;
+
+    maskedValue = maskedValue.replace(/\D/g, '');
+
+    maskedValue = maskedValue.replace(/(\d{2})(\d)/, '$1/$2');
+    maskedValue = maskedValue.replace(/(\d{2})(\d)/, '$1/$2');
+
+    return maskedValue;
+  };
+
+  const hourMask = function (v) {
+    let maskedValue = v;
+
+    maskedValue = maskedValue.replace(/\D/g, '');
+    maskedValue = maskedValue.replace(/(\d{2})(\d)/, '$1:$2');
+
+    return maskedValue;
+  };
+
+  const currency = function (v) {
+    let maskedValue = v;
+
+    maskedValue = maskedValue.replace(/\D/g, '');
+    maskedValue = maskedValue.replace(/(\d)(\d{2})$/, '$1,$2');
+    maskedValue = maskedValue.replace(/(?=(\d{3})+(\D))\B/g, '.');
+
+    return maskedValue;
+  };
+
+  const percentageMask = function (v) {
+    let maskedValue = v;
+    maskedValue = maskedValue.replace(/[^0-9\.]/g, '');
+
+    if (!maskedValue) {
+      return '';
+    }
+
+    return `${maskedValue}%`;
+  };
+
+  return (
+    <div>
+      <strong>Masked Inputs</strong>
+      <div className="form-group">
+        <label htmlFor="">Masked Date</label>
+        <FormInput2 name="masks.date" maxLength="10" maskFunction={dateMask} />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="">Masked Hour</label>
+        <FormInput2 name="masks.hour" maxLength="5" maskFunction={hourMask} />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="">Masked 3 decimals Number</label>
+        <FormInput2 name="masks.decimal" maskFunction={decimalMask} />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="">Percentage Mask % </label>
+        <FormInput2
+          name="masks.percentage"
+          maskFunction={percentageMask}
+          afterChange={(value) => {
+            const rawValue = value.replace(/\%/, '');
+            percentageFormControl.setValue(Number(rawValue) / 100);
+          }}
+        />
+        <FormInput2 type="number" name="masks.percentageValue" style={{ display: 'none' }} />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="">currency</label>
+        <FormInput2 name="masks.currency" maskFunction={currency} />
+      </div>
+    </div>
+  );
 }
